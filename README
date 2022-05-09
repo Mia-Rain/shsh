@@ -1,0 +1,11 @@
+---
+shsh
+-- sh in sh but better
+-- (sh+)
+---
+What? Why?
+-- shsh aims to simply upgrade the wheel, implementing psh-fractional & psh-fc
+-- directly into the lang to prevent headaches from dealing with submods
+-- this should create POSIX sh with float support!
+---- using /ONLY/ pure sh
+---
