@@ -3,6 +3,15 @@ shsh
 -- sh in sh but better
 -- (sh+)
 ---
+Added Features
+-- float math via psh-fractional
+---- WIP
+-- test flags to compare floats
+---- 100% working
+-- $RANDOM in pure sh
+---- 100% working
+---- will make use of $!/PID over /dev/urandom
+---
 What? Why?
 -- shsh aims to simply upgrade the wheel, implementing psh-fractional & psh-fc
 -- directly into the lang to prevent headaches from dealing with submods

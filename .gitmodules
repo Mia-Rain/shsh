@@ -1,0 +1,12 @@
+[submodule "math"]
+	path = math
+	url = https://dicksdeathabove.xyz/~mia/psh-fractional
+	branch = master
+[submodule "com"]
+	path = com
+	url = https://dicksdeathabove.xyz/~mia/psh-fc
+	branch = master
+[submodule "ran"]
+	path = ran
+	url = git@dicksdeathabove.xyz:~mia/psh-prng
+	branch = master
