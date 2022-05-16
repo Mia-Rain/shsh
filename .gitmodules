@@ -8,5 +8,9 @@
 	branch = master
 [submodule "ran"]
 	path = ran
-	url = git@dicksdeathabove.xyz:~mia/psh-prng
+	url = https://dicksdeathabove.xyz/~mia/psh-prng
+	branch = master
+[submodule "mwrap"]
+	path = mwrap
+	url = https://dicksdeathabove.xyz/~mia/psh-rpn
 	branch = master

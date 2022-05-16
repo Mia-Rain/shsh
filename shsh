@@ -1,0 +1,44 @@
+#!/bin/sh
+nl='
+'
+shcat() {
+  while IFS= read -r p || [ "$p" ]; do
+    printf '%s' "$p$nl"
+  done
+}
+case "$1" in
+  "") in="$(shcat <&0)";;
+  *) in="$(shcat <"$1")"
+esac
+modpaths="${modpaths:-$PWD}"   # folder where submods can be found
+#pshrngNAME="${pshrngNAME:-rng}"# name of the psh-prng folder
+#pshrngBIN="${pshrngBIN:-ran}"  # name of the psh-prng binary/script file
+pshfcNAME="${pshfcNAME:-com}"  # name of the psh-fc folder
+pshfcBIN="${pshfcBIN:-com}"    # name of the psh-fc binary/script file
+pshfrNAME="${pshfrNAME:-math}" # name of the psh-fractional folder
+pshfrPATH="${pshfrPATH:-${modpaths}/math}" # needed by psh-rpn
+pshfrBIN="${pshfrBIN:-cal}"    # psh-rpn is used as the psh-fractional binary/script file
+export pshfrPATH # only pshfrPATH is needed outside currently
+# edits will need to be made to psh-prng for use of modpaths
+while IFS= read -r p || [ "$p" ]; do
+  IFS=" "; for i in $p; do
+    case "$i" in
+      '[') TEST=0;;
+      ']') unset TEST; TESTvar="${TESTvar+$TESTvar } ]"
+    esac
+    [ "$TEST" ] && {
+      [ "$i" = '[' ] && continue
+      TESTvar="${TESTvar+$TESTvar }$i"
+    }
+    [ ! "$TEST" ] && {
+      unset IFS; [ "$TESTvar" ] && {
+        p="${modpaths}/${pshfcNAME}/${pshfcBIN} $p"
+        #echo "$p" >&2
+      }
+    } && unset TESTvar
+    # $TEST is not a test variable, [/[[ is also test
+  done
+  printf '%s' "$p$nl"
+done << EOF
+$in
+EOF

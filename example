@@ -1,0 +1,5 @@
+#!/bin/sh
+[ 1.5 -eq 1.50 -a 1.001 -lt 1 ] || echo "false"
+# should print 'false' as 1.001 is > 1 
+# shsh relys heavily on spaces
+# but so does sh
