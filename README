@@ -2,14 +2,19 @@
 shsh
 -- sh in sh but better
 -- (sh+)
+-- (a compiler for sh in sh)
 ---
 Added Features
 -- float math via psh-fractional
 ---- WIP
+---- not yet implemented
+---- will use RPN
 -- test flags to compare floats
 ---- 100% working
+---- implemented
 -- $RANDOM in pure sh
 ---- 100% working
+---- not yet implemented
 ---- will make use of $!/PID over /dev/urandom
 ---
 What? Why?
