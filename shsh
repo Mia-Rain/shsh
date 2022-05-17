@@ -10,16 +10,26 @@ case "$1" in
   "") in="$(shcat <&0)";;
   *) in="$(shcat <"$1")"
 esac
-modpaths="${modpaths:-$PWD}"   # folder where submods can be found
-#pshrngNAME="${pshrngNAME:-rng}"# name of the psh-prng folder
-#pshrngBIN="${pshrngBIN:-ran}"  # name of the psh-prng binary/script file
-pshfcNAME="${pshfcNAME:-com}"  # name of the psh-fc folder
-pshfcBIN="${pshfcBIN:-com}"    # name of the psh-fc binary/script file
-pshfrNAME="${pshfrNAME:-math}" # name of the psh-fractional folder
-pshfrPATH="${pshfrPATH:-${modpaths}/math}" # needed by psh-rpn
-pshfrBIN="${pshfrBIN:-cal}"    # psh-rpn is used as the psh-fractional binary/script file
+
+## Read the `shsh.conf` file, if it exists.
+for d in $PWD $XDG_CONFIG_HOME/shsh $HOME/.config/shsh # current list of possible locations
+do
+    if [ -d "${d}" ] && [ -f "${d}/shsh.conf" ]
+    then
+        . ${d}/shsh.conf
+        break # reads the first one found
+    else continue
+    fi
+done
+
+## Setting the submod paths to user-configured ones, otherwise defaulting to the defaults.
+modpaths="${user_modpaths:-$PWD}"    # folder where submods can be found
+pshrng_DIR="${user_pshrng_DIR:-rng}" # name of the psh-prng folder
+pshfc_DIR="${user_pshfc_DIR:-com}"   # name of the psh-fc folder
+pshfr_DIR="${user_pshfr_DIR:-math}"  # name of the psh-fractional folder
+pshfrPATH="${user_pshfrPATH:-${modpaths}/math}" # needed by psh-rpn
 export pshfrPATH # only pshfrPATH is needed outside currently
-# edits will need to be made to psh-prng for use of modpaths
+
 while IFS= read -r p || [ "$p" ]; do
   IFS=" "; for i in $p; do
     case "$i" in
@@ -32,7 +42,7 @@ while IFS= read -r p || [ "$p" ]; do
     }
     [ ! "$TEST" ] && {
       unset IFS; [ "$TESTvar" ] && {
-        p="${modpaths}/${pshfcNAME}/${pshfcBIN} $p"
+        p="${modpaths}/${pshfc_DIR}/com $p"
         #echo "$p" >&2
       }
     } && unset TESTvar
