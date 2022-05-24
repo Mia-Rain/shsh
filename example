@@ -1,5 +1,12 @@
 #!/bin/sh
-[ 1.5 -eq 1.50 -a 1.001 -lt 1 ] || echo "false"
-# should print 'false' as 1.001 is > 1 
-# shsh relys heavily on spaces
-# but so does sh
+[ ! 1.9 -eq 1.901 -a 0.002 -gt 0 ] && echo '1.9 != 1.901 && 0.002 > 0'
+[ 0.2 -lt 0 ] || echo '0.2 > 0' 
+# psh-fc implementation example; should output '1.9 != 1.901 && 0.002 > 0'
+# > is bugged because of how dash handles it
+# please use '>' if you really need it
+# -gt works fine tho
+printf '1.5 + 0.5 + 1 = '; num=$([1.5 0.5 +]); num=$([1 $num +]); echo "$num"
+# psh-fractional/psh-rpn+ example
+# should output 3 
+# could add a search function to the psh-fractional imp
+# for auto variable replacement

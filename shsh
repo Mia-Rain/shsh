@@ -12,7 +12,7 @@ case "$1" in
 esac
 
 ## Read the `shsh.conf` file, if it exists.
-for d in $PWD $XDG_CONFIG_HOME/shsh $HOME/.config/shsh # current list of possible locations
+for d in $PWD ${XDG_CONFIG_HOME:-$HOME/.config}/shsh /etc/shsh # current list of possible locations
 do
     if [ -d "${d}" ] && [ -f "${d}/shsh.conf" ]
     then
@@ -28,25 +28,44 @@ pshrng_DIR="${user_pshrng_DIR:-rng}" # name of the psh-prng folder
 pshfc_DIR="${user_pshfc_DIR:-com}"   # name of the psh-fc folder
 pshfr_DIR="${user_pshfr_DIR:-math}"  # name of the psh-fractional folder
 pshfrPATH="${user_pshfrPATH:-${modpaths}/math}" # needed by psh-rpn
+fcwrPATH="${user_fcwrPATH:-${modpaths}/mwrap}"
 export pshfrPATH # only pshfrPATH is needed outside currently
-
 while IFS= read -r p || [ "$p" ]; do
   IFS=" "; for i in $p; do
+    #echo "-- $i ?" >&2
     case "$i" in
-      '[') TEST=0;;
-      ']') unset TEST; TESTvar="${TESTvar+$TESTvar } ]"
+      '#') : ;;
+      '[') FC=0;;
+      ']') unset FC; FCdat="${FCdat+$FCdat } ]";;
+      *'=$(['*|*'="$(['*) FR=0; FRdat="${i#${i%%[*}[}"; continue ;;
+      *'])'*) FRdat="${FRdat+$FRdat }${i%%])*}"; unset FR
     esac
-    [ "$TEST" ] && {
+    ## psh-fc
+    [ "$FC" ] && {
       [ "$i" = '[' ] && continue
-      TESTvar="${TESTvar+$TESTvar }$i"
+      FCdat="${FCdat+$FCdat }$i"
     }
-    [ ! "$TEST" ] && {
-      unset IFS; [ "$TESTvar" ] && {
+    [ ! "$FC" -a "$FCdat" ] && {
+      unset IFS; [ "$FCdat" ] && {
         p="${modpaths}/${pshfc_DIR}/com $p"
-        #echo "$p" >&2
       }
-    } && unset TESTvar
-    # $TEST is not a test variable, [/[[ is also test
+    } && unset FCdat
+    ## psh-fractional
+    [ "$FR" ] && {
+      FRdat="${FRdat+$FRdat }$i"
+      #echo "| $i -- $FRdat" >&2
+    }
+    [ ! "$FR" -a "$FRdat" != "" ] && {
+      IFS=" "; set -- $FRdat; for n in "$@"; do
+        if [ ! -z "${n##*.*}" ] && ! printf %d "$n" >/dev/null 2>/dev/null && (eval i=\${$n}) 2>/dev/null; then
+          ex=${n}
+        fi
+      done
+      unset IFS
+      [ "$ex" ] && ex="${ex}=\$${ex}"
+      p="${p%(\[$FRdat])*}(${fcwrPATH}/cal $FRdat)${p##*$FRdat\])}"
+      unset FRdat FR ex
+    }
   done
   printf '%s' "$p$nl"
 done << EOF
