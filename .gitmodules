@@ -9,7 +9,7 @@
 [submodule "ran"]
 	path = ran
 	url = https://dicksdeathabove.xyz/~mia/psh-prng
-	branch = master
+	branch = xor
 [submodule "mwrap"]
 	path = mwrap
 	url = https://dicksdeathabove.xyz/~mia/psh-rpn
