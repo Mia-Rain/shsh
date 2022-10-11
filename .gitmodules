@@ -17,3 +17,6 @@
 [submodule "sh-libarray"]
 	path = sh-libarray
 	url = https://codeberg.org/sockless-foundation/sh-libarray.git
+[submodule "sh-libdict"]
+	path = sh-libdict
+	url = https://codeberg.org/sockless-foundation/sh-libdict.git
