@@ -23,3 +23,10 @@ What? Why?
 -- this should create POSIX sh with float support!
 ---- using /ONLY/ pure sh
 ---
+Syntax
+-- shsh doesn't run independently, it's a text processing tool
+-- it reads STDIN and outputs the 'compiled' shell script to STDOUT
+-- Examples:
+- cat foo.shsh | shsh > bar.sh
+- cat foo.shsh | shsh | sh
+---
