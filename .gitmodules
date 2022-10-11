@@ -14,3 +14,6 @@
 	path = mwrap
 	url = https://dicksdeathabove.xyz/~mia/psh-rpn
 	branch = master
+[submodule "sh-libarray"]
+	path = sh-libarray
+	url = https://codeberg.org/sockless-foundation/sh-libarray.git
